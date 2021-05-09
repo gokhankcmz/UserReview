@@ -1,5 +1,7 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
 using Entities;
+using Entities.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,10 +17,12 @@ namespace UserReview.Controllers
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
-        public ReviewController(IRepositoryManager repository, ILoggerManager logger)
+        private readonly IMapper _mapper;
+        public ReviewController(IRepositoryManager repository, ILoggerManager logger,  IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
 
@@ -27,7 +31,8 @@ namespace UserReview.Controllers
         {
 
             var reviews = _repository.Review.GetReviews(ReviewStatus.Approved, trackChanges: false);
-            return Ok(reviews);
+            var reviewsDTO = _mapper.Map<IEnumerable<PublicReview>>(reviews);
+            return Ok(reviewsDTO);
         }
 
 
@@ -35,7 +40,8 @@ namespace UserReview.Controllers
         public IActionResult GetUserReviews(Guid id)
         {
             var reviews = _repository.Review.GetReviews(id, trackChanges: false);
-            return Ok(reviews);
+            var reviewsDTO = _mapper.Map<IEnumerable<PublicReview>>(reviews);
+            return Ok(reviewsDTO);
         }
 
 

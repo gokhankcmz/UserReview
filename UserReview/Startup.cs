@@ -37,6 +37,7 @@ namespace UserReview
             services.UseConfigureLoggerService();
             services.UseConfigureSqlContext(Configuration);
             services.UseConfigureRepositoryManager();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
         }
 
