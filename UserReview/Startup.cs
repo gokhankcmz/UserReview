@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using UserReview.ActionFilters;
 using UserReview.Extensions;
 
 namespace UserReview
@@ -38,6 +39,11 @@ namespace UserReview
             services.UseConfigureSqlContext(Configuration);
             services.UseConfigureRepositoryManager();
             services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddAuthentication();
+            services.UseAddAuthorization(Configuration);
+            services.ConfigureJWT(Configuration);
             services.AddControllers();
         }
 
@@ -60,7 +66,8 @@ namespace UserReview
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
-            app.UseRouting();
+            app.UseRouting(); 
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
@@ -70,8 +77,6 @@ namespace UserReview
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

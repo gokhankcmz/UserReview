@@ -12,7 +12,12 @@ namespace UserReview
     {
         public MappingProfile()
         {
-            CreateMap<Review, PublicReview>();
+            CreateMap<Review, ReviewDtoPublic>();
+            CreateMap<User, UserDto>();
+            CreateMap<UserDtoForCreation, User>();
+            CreateMap<ReviewForCreationDto, Review>();
+            CreateMap<Review, ReviewDto_user>();
+            CreateMap<ReviewForUpdateDto, Review>().ReverseMap();
         }
     }
 }

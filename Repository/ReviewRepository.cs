@@ -13,6 +13,14 @@ namespace Repository
         public ReviewRepository(RepositoryContext repositoryContext)
             : base(repositoryContext)
         { }
+
+
+        public void CreateReview(Guid userId, Review review)
+        {
+            review.userId = userId;
+            Create(review);
+        }
+
         public IEnumerable<Review> GetReviews(bool trackChanges) =>
             FindAll(trackChanges)
             .OrderBy(c => c.CreatedAt)
@@ -27,5 +35,9 @@ namespace Repository
             FindAll(trackChanges).Where(c=>c.userId.Equals(userId))
             .OrderBy(c => c.CreatedAt)
             .ToList();
+
+        public Review GetReview(Guid reviewId, bool trackChanges) =>
+            FindByCondition(c => c.Id.Equals(reviewId), trackChanges).SingleOrDefault();
+
     }
 }
